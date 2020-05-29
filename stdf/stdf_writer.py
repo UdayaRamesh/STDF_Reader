@@ -127,11 +127,28 @@ class Writer:
         dat_ret = []
 
         if fmt_raw == 'Cn':
-            string, length = item
+            # Certain Optional fields are read as 0 by the reader.
+            # The code snippet which does that is below
+            # fmt = self.__get_format(fmt_raw, body_raw)
+            # if fmt:
+            #     size = struct.calcsize(fmt)
+            #     buf = body_raw.read(size)
+            #     self.log.debug('fmt={}, buf={}'.format(fmt, buf))
+            #     return fmt, buf
+            # else:
+            #     return 0, 0
+            #
+            if isinstance(item, int):
+                if item:
+                    item = bytes(item)
+                else:
+                    item = b''
+            length = len(item)
+            string = item.decode('utf-8')
+#             string, length = item
             fmt_ret += 'B' + str(length) + 's'
             dat_ret.append(length)
             dat_ret.append(string.encode())
-
         elif fmt_raw == 'Bn':
             length = len(item)
             fmt_ret += 'B' + str(length) + 'B'
