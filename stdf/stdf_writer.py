@@ -167,11 +167,14 @@ class Writer:
         odd_nibble = True
 
         for field_name, fmt_raw in field_fmt:
-            item = field_data[field_name]
+            # When hit an optional field break out of the loop
+            item = field_data.get(field_name, None)
+            if item is None:
+                break
 
             if fmt_raw.startswith('K'):
                 mo = re.match('^K([0xn])(\w{2})', fmt_raw)
-                n = self.__get_multiplier(field_name, body_data)
+                n = self.__get_multiplier(field_name, field_data)
                 fmt_act = mo.group(2)
 
                 for i in range(n):
