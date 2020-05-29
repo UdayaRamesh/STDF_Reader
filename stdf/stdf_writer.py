@@ -203,7 +203,7 @@ class Writer:
         mapping = self.STDF_TYPE[rec_name]['body']
         fmt_b, data_b = self._pack_body(mapping, data)
 
-        rec_len = struct.calcsize('HBB' + fmt_b) - 4
+        rec_len = struct.calcsize(self.e + 'HBB' + fmt_b) - 4
         rec_typ = self.STDF_TYPE[rec_name]['rec_typ']
         rec_sub = self.STDF_TYPE[rec_name]['rec_sub']
         fmt_h, data_h = self._pack_header(rec_len, rec_typ, rec_sub)
