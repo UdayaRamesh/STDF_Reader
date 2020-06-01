@@ -18,11 +18,12 @@ THE SOFTWARE."""
 import struct
 import json
 import re
+from os import path
 
 
 class Writer:
 
-    def __init__(self, stdf_type_json='stdf_v4.json'):
+    def __init__(self, stdf_type_json=None):
         self.STDF_TYPE = {}
         self.REC_NAME = {}
         self.FMT_MAP = {}
@@ -33,7 +34,13 @@ class Writer:
         self.load_stdf_type(stdf_type_json)
 
     def load_stdf_type(self, json_file):
-        with open(json_file) as fp:
+        if json_file is None:
+            here = path.abspath(path.dirname(__file__))
+            input_file = path.join(here, 'stdf_v4.json')
+        else:
+            input_file = json_file
+
+        with open(input_file) as fp:
             self.STDF_TYPE = json.load(fp)
 
         for k, v in self.STDF_TYPE.items():
